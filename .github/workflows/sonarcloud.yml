@@ -80,6 +80,6 @@ jobs:
 
       - name: Authenticate Snyk
         run: snyk auth ${{ secrets.SNYK_TOKEN }}
-
+ 
       - name: run Snyk test
         run: snyk test --al-projects
