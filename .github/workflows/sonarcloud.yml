@@ -32,7 +32,7 @@ on:
   push:
     branches:
       - "main"
-      - "pipeline/*"
+      - "pipeline-1"
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
