@@ -32,7 +32,7 @@ on:
   push:
     branches:
       - "main"
-      - "pipeline-1"
+      - "pipeline/*"
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
@@ -41,7 +41,7 @@ permissions:
   pull-requests: read # allows SonarCloud to decorate PRs with analysis results
 
 jobs:
-  Analysis:
+  Sonarqube:
     runs-on: ubuntu-latest
 
     steps:
@@ -67,3 +67,19 @@ jobs:
             #-Dsonar.verbose= # optional, default is false
           # When you need the analysis to take place in a directory other than the one from which it was launched, default is .
           projectBaseDir: .
+  Snyk:
+    runs-on: ubuntu-latest
+    needs: Sonarqube
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Snyk
+        uses: npm install -g snyk
+
+      - name: Authenticate Snyk
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+
+      - name: run Snyk test
+        run: snyk test --al-projects
